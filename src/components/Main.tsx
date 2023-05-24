@@ -1,23 +1,21 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setUserProfile } from "../store/userSlice";
 
 const Main = () => {
-    const user = useSelector((state: any) => state.user.user)
-    const dispatch = useDispatch()
-
-    const loadUser = () => {
-        dispatch(setUserProfile(1))
-    }
+    const user = useAppSelector((state) => state.user)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        loadUser()
-    }, [])
+        dispatch(setUserProfile({
+            userId: 1,
+            userName: "Dave"
+        }))
+    }, [dispatch])
   
     return (
         <main className="content">
-            <div>{user.userName}</div>
+            <div>{user.userId}</div>
         </main>
     )
 };
