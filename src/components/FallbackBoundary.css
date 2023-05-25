@@ -1,0 +1,10 @@
+.error-container {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.error-message {
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 1rem;
+}
