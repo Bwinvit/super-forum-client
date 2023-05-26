@@ -1,16 +1,22 @@
-import React from "react";
-import getTimePassIfLessThanDay from "../../../common/dates";
+import React, { useState } from "react";
+import Registration from "../../auth/Registration";
 
 const Main = () => {
+  const [showRegister, setShowRegister] = useState(true);
 
-    const test = getTimePassIfLessThanDay(new Date("2023-05-25T12:50:00"))
-    console.log(test)
-  
-    return (
-        <main className="content">
-            <div>Main</div>
-        </main>
-    )
+  const onClickToggleRegister = () => {
+    setShowRegister(!showRegister);
+  };
+
+  return (
+    <main className="content">
+      <div>Main</div>
+      <Registration
+        isOpen={showRegister}
+        onClickToggle={onClickToggleRegister}
+      />
+    </main>
+  );
 };
 
 export default Main;

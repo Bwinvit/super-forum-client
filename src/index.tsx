@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ErrorBoundary } from "react-error-boundary";
-import FallbackRender from "./components/FallbackBoundary";
+import FallbackRender from "./components/fallback/FallbackBoundary";
 // import ErrorBoundary from './components/ErrorBoundary';
 
 const root = ReactDOM.createRoot(
