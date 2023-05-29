@@ -1,21 +1,28 @@
-import React from 'react';
-import './App.css';
-import Nav from './components/areas/Nav/Nav';
-import SideBar from './components/areas/SideBar/SideBar';
-import LeftMenu from './components/areas/LeftMenu/LeftMenu';
-import Main from './components/areas/main/Main';
-import RightMenu from './components/areas/rightMenu/RightMenu';
+import React, { useEffect } from "react";
+import "./App.css";
+import { setUserProfile } from "./store/userSlice";
+import { useAppDispatch } from "./store/hooks";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/routes/Home";
 
 function App() {
-  return (
-    <div className="App">
-      <Nav />
-      <SideBar />
-      <LeftMenu />
-      <Main />
-      <RightMenu />
-    </div>
-  );
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(
+            setUserProfile({
+                userId: 1,
+                userName: "testUser",
+            })
+        );
+    }, [dispatch]);
+
+    return (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/categorythreads/:categoryId" element={<Home />} />
+        </Routes>
+    );
 }
 
 export default App;

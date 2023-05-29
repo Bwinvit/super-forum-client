@@ -1,4 +1,4 @@
-import { Dispatch } from "redux";
+import { Dispatch } from "react";
 
 export const allowSubmit = (
     dispatch: Dispatch<any>,

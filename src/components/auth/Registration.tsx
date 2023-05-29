@@ -118,6 +118,7 @@ const Registration: FC<RegistrationProps> = ({ isOpen, onClickToggle }) => {
               type="password"
               value={state.passwordConfirm}
               onChange={onChangePasswordConfirm}
+              placeholder="Password Confirmation"
             />
           </div>
           <div className="reg-buttons">

@@ -7,19 +7,21 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ErrorBoundary } from "react-error-boundary";
 import FallbackRender from "./components/fallback/FallbackBoundary";
-// import ErrorBoundary from './components/ErrorBoundary';
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ErrorBoundary FallbackComponent={FallbackRender}>
-        {[<App key={"App"} />]}
-      </ErrorBoundary>
-    </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <BrowserRouter>
+                <ErrorBoundary FallbackComponent={FallbackRender}>
+                    {[<App key={"App"} />]}
+                </ErrorBoundary>
+            </BrowserRouter>
+        </Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

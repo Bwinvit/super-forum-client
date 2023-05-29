@@ -1,123 +1,124 @@
 :root {
-  --min-screen-height: 1000px;
+    --min-screen-height: 1000px;
 }
 
 .App {
-  margin: 0 auto;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: 0.7fr 0.9fr 1.5fr 0.9fr;
-  grid-template-rows: 2.75rem 3fr;
-  grid-template-areas:
-    "nav nav nav nav"
-    "sidebar leftmenu content rightmenu";
-  gap: 0.75rem 0.4rem;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 0.7fr 0.9fr 1.5fr 0.9fr;
+    grid-template-rows: 2.75rem 3fr;
+    grid-template-areas:
+        "nav nav nav nav"
+        "sidebar leftmenu content rightmenu";
+    gap: 0.75rem 0.4rem;
 }
 
 .navigation {
-  grid-area: nav;
+    grid-area: nav;
 }
 
 .sidebar {
-  grid-area: sidebar;
-  min-height: var(--min-screen-height);
-  background-color: aliceblue;
+    grid-area: sidebar;
+    min-height: var(--min-screen-height);
+    background-color: aliceblue;
 }
 
 .leftmenu {
-  grid-area: leftmenu;
-  background-color: skyblue;
+    grid-area: leftmenu;
+    background-color: skyblue;
 }
 
 .content {
-  grid-area: content;
-  background-color: blanchedalmond;
-  min-height: var(--min-screen-height);
+    min-height: var(--min-screen-height);
+    grid-area: content;
+    background-color: blanchedalmond;
+    padding: 0.5em 0.75em 0.5em 0.75em;
 }
 
 .rightmenu {
-  grid-area: rightmenu;
-  background-color: coral;
+    grid-area: rightmenu;
+    background-color: coral;
 }
 
 ul {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 .modal-menu {
-  position: fixed;
-  min-width: 550px;
-  left: 50%;
-  top: 4.5em;
-  transform: translate(-50%);
-  border: var(--border);
-  border-color: black;
-  border-radius: 5px;
-  background-color: white;
-  padding: 1em 1em 1em 1em;
-  z-index: 1000;
+    position: fixed;
+    min-width: 550px;
+    left: 50%;
+    top: 4.5em;
+    transform: translate(-50%);
+    border: var(--border);
+    border-color: black;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1em 1em 1em 1em;
+    z-index: 1000;
 }
 
 .action-btn {
-  background-color: skyblue;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    background-color: skyblue;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .cancel-btn {
-  background-color: white;
-  color: gray;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: solid 1px gray;
-  border-radius: 4px;
-  cursor: pointer;
+    background-color: white;
+    color: gray;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: solid 1px gray;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 input[type="text"],
 input[type="password"],
 select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 input[type="submit"] {
-  width: 100%;
-  background-color: #4caf50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    width: 100%;
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 input[type="submit"]:hover {
-  background-color: #45a049;
+    background-color: #45a049;
 }
 
 @media screen and (orientation: portrait) and (max-width: 768px) {
-  .App {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "nav"
-      "content";
-  }
+    .App {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "nav"
+            "content";
+    }
 
-  .modal-menu {
-    min-width: 60px;
-    left: 0.5em;
-    right: 0.5em;
-    top: 3.5em;
-    transform: translate(0%);
-  }
+    .modal-menu {
+        min-width: 60px;
+        left: 0.5em;
+        right: 0.5em;
+        top: 3.5em;
+        transform: translate(0%);
+    }
 }
