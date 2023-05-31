@@ -6,7 +6,7 @@ export default class Thread {
         public id: string,
         public views: number,
         public title: any,
-        public body: string,
+        public body: string | undefined,
         public userName: any,
         public userId: string,
         public points: number,

@@ -16,10 +16,6 @@
     --sm-med-font-size: 1.1em;
 }
 
-li {
-    list-style: none;
-}
-
 .screen-root-container {
     margin: 0 auto;
     max-width: 1200px;

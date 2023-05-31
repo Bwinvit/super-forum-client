@@ -4,6 +4,11 @@ import { useParams } from "react-router-dom";
 import { getThreadById } from "../../../services/DataService";
 import Nav from "../../areas/Nav/Nav";
 import ThreadHeader from "./ThreadHeader";
+import ThreadCategory from "./ThreadCategory";
+import ThreadTitle from "./ThreadTitle";
+import "./Thread.css"
+import ThreadBody from "./ThreadBody";
+import ThreadResponseBuilder from "./ThreadResponseBuilder";
 
 const Thread = () => {
       const [ thread, setThread ] = useState<ThreadModel | undefined>()
@@ -29,6 +34,13 @@ const Thread = () => {
                               LastModifiedOn={thread ? thread.lastModifiedOn : new Date()}
                               title={thread?.title}
                         />
+                        <ThreadCategory categoryName={thread?.category?.name} />
+                        <ThreadTitle title={thread?.title} />
+                        <ThreadBody body={thread?.body} />
+                  </div>
+                  <div className="thread-content-response-container">
+                        <hr className="thread-section-divider" />
+                        <ThreadResponseBuilder threadItem={thread?.threadItems} />
                   </div>
             </div>
       )
