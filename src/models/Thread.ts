@@ -5,9 +5,9 @@ export default class Thread {
     constructor(
         public id: string,
         public views: number,
-        public title: string,
+        public title: any,
         public body: string,
-        public userName: string,
+        public userName: any,
         public userId: string,
         public points: number,
         public createdOn: Date,

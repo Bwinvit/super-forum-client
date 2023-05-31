@@ -1,0 +1,11 @@
+.wrong-url {
+      margin: auto !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center;
+      flex-direction: column;
+}
+
+.wrong-notation {
+      color: red;
+}

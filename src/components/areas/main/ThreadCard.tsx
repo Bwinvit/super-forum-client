@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useWindowDimensions from "../../../hook/useWindowDimension";
 import { faEye, faHeart, faReply } from "@fortawesome/free-solid-svg-icons";
+import "./ThreadCard.css"
 
 interface ThreadCardProps {
     thread: Thread
@@ -32,8 +33,8 @@ const ThreadCard: FC<ThreadCardProps> = ({ thread }) => {
                     />
                 </label>
             )
-            return null
         }
+        return null
     }
 
     const getResponse = ( thread : Thread ) => {

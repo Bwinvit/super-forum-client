@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Category from "../../../models/Category";
 import { getThreadsByCategory } from "../../../services/DataService";
 import MainHeader from "./MainHeader";
+import ThreadCard from "./ThreadCard";
 
 const Main = () => {
     const { categoryId } = useParams();
@@ -14,9 +15,8 @@ const Main = () => {
     useEffect(() => {
         if (categoryId && parseInt(categoryId) > 0) {
             getThreadsByCategory(categoryId).then((threads: any) => {
-                const cards = threads.map((th: { id: any }) => {
-                    // return <ThreadCards key={`thread-${th.id}`} thread={th} />
-                    return <div>{th.id}</div>;
+                const cards = threads.map((th: any) => {
+                    return <ThreadCard key={`thread-${th.id}`} thread={th} />
                 });
                 if (!category) {
                     setCategory(threads[0].category);
