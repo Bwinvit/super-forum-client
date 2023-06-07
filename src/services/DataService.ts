@@ -190,7 +190,7 @@ export async function getThreadById(Id: string): Promise<Thread> {
     return promise;
 }
 
-export async function getUserThreads(id: string): Promise<Array<Thread>> {
+export async function getUserThreads(id: number): Promise<Array<Thread>> {
     const result = new Promise<Array<Thread>>((res) => {
         setTimeout(() => {
             const threads: Array<Thread> = [];

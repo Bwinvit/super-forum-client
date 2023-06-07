@@ -1,11 +1,8 @@
 import React, { FC, useReducer, useState } from "react";
 import UserReducer from "./common/UserReducer";
-import {
-  PasswordTestResult,
-  isPasswordValid,
-} from "../../common/validators/PasswordValidators";
 import ReactModal from "react-modal";
 import "./Registration.css";
+import PasswordComparison from "./common/PasswordComparision";
 
 export interface RegistrationProps {
   isOpen: boolean;
@@ -44,31 +41,6 @@ const Registration: FC<RegistrationProps> = ({ isOpen, onClickToggle }) => {
     else allowRegister("", false);
   };
 
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "password", payload: e.target.value });
-    const passwordCheck: PasswordTestResult = isPasswordValid(e.target.value);
-    if (!passwordCheck.isValid) {
-      allowRegister(passwordCheck.message, true);
-      return;
-    }
-    passwordsSame(state.passwordConfirm, e.target.value);
-  };
-
-  const onChangePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "passwordConfirm", payload: e.target.value });
-    passwordsSame(state.password, e.target.value);
-  };
-
-  const passwordsSame = (passwordVal: string, passwordConfirmVal: string) => {
-    if (passwordVal !== passwordConfirmVal) {
-      allowRegister("Password do not match", true);
-      return false;
-    } else {
-      allowRegister("", false);
-      return true;
-    }
-  };
-
   const onClickRegister = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -104,21 +76,10 @@ const Registration: FC<RegistrationProps> = ({ isOpen, onClickToggle }) => {
             <input type="text" value={state.email} onChange={onChangeEmail} />
           </div>
           <div>
-            <label>Password</label>
-            <input
-              type="password"
-              value={state.password}
-              onChange={onChangePassword}
-              placeholder="Password"
-            />
-          </div>
-          <div>
-            <label>Password Confirm</label>
-            <input
-              type="password"
-              value={state.passwordConfirm}
-              onChange={onChangePasswordConfirm}
-              placeholder="Password Confirmation"
+            <PasswordComparison
+              dispatch={dispatch}
+              password={state.password}
+              passwordConfirm={state.passwordConfirm}
             />
           </div>
           <div className="reg-buttons">

@@ -13,6 +13,7 @@ import "./SideBarMenus.css";
 import Registration from "../../auth/Registration";
 import Login from "../../auth/Login";
 import Logout from "../../auth/Logout";
+import { Link } from "react-router-dom";
 
 const SideBarMenus = () => {
     const user = useAppSelector((state) => state.user);
@@ -39,10 +40,9 @@ const SideBarMenus = () => {
                 <li>
                     <FontAwesomeIcon icon={faUser} />
                     <span className="menu-name">
-                        {/* <Link to={`/userprofile/${user?.userId}`}>
+                        <Link to={`/userprofile/${user?.userId}`}>
                             {user?.userName}
-                        </Link> */}
-                        {user.userName}
+                        </Link>
                     </span>
                 </li>
                 <li>

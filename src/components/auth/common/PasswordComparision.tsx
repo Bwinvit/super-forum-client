@@ -1,41 +1,38 @@
-import React from "react";
+import React, { FC } from "react";
 import { allowSubmit } from "./Helpers";
 import {
   isPasswordValid,
   PasswordTestResult,
 } from "../../../common/validators/PasswordValidators";
-import { Dispatch } from "redux";
 
 interface PasswordComparisonProps {
-  dispatch: Dispatch<any>;
+  dispatch: React.Dispatch<any>;
   password: string;
   passwordConfirm: string;
 }
 
-const PasswordComparison: React.FC<PasswordComparisonProps> = ({
+const PasswordComparison: FC<PasswordComparisonProps> = ({
   dispatch,
   password,
   passwordConfirm,
 }) => {
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "password", payload: e.target.value });
+    dispatch({ payload: e.target.value, type: "password" });
     const passwordCheck: PasswordTestResult = isPasswordValid(e.target.value);
 
     if (!passwordCheck.isValid) {
       allowSubmit(dispatch, passwordCheck.message, true);
       return;
     }
-    passwordSame(passwordConfirm, e.target.value);
+    passwordsSame(passwordConfirm, e.target.value);
   };
-
   const onChangePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "passwordConfirm", payload: e.target.value });
-    passwordSame(passwordConfirm, e.target.value);
+    dispatch({ payload: e.target.value, type: "passwordConfirm" });
+    passwordsSame(password, e.target.value);
   };
-
-  const passwordSame = (passwordVal: string, passwordConfirmVal: string) => {
+  const passwordsSame = (passwordVal: string, passwordConfirmVal: string) => {
     if (passwordVal !== passwordConfirmVal) {
-      allowSubmit(dispatch, "Password do not match", true);
+      allowSubmit(dispatch, "Passwords do not match", true);
       return false;
     } else {
       allowSubmit(dispatch, "", false);
@@ -44,9 +41,9 @@ const PasswordComparison: React.FC<PasswordComparisonProps> = ({
   };
 
   return (
-    <>
+    <React.Fragment>
       <div>
-        <label>Password</label>
+        <label>password</label>
         <input
           type="password"
           placeholder="Password"
@@ -55,7 +52,7 @@ const PasswordComparison: React.FC<PasswordComparisonProps> = ({
         />
       </div>
       <div>
-        <label>Password Confirmation</label>
+        <label>password confirmation</label>
         <input
           type="password"
           placeholder="Password Confirmation"
@@ -63,8 +60,8 @@ const PasswordComparison: React.FC<PasswordComparisonProps> = ({
           onChange={onChangePasswordConfirm}
         />
       </div>
-    </>
+    </React.Fragment>
   );
 };
 
-export default PasswordComparison
+export default PasswordComparison;
