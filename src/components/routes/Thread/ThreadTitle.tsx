@@ -1,12 +1,27 @@
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 
 
 interface ThreadTitleProps {
       title?: string
+      readOnly: boolean
+      sendOutTitle: (title: string) => void
 }
 
-const ThreadTitle: FC<ThreadTitleProps> = ({ title }) => {
-      const onChangeTitle = (e: React.InputHTMLAttributes<HTMLInputElement>) => {}
+const ThreadTitle: FC<ThreadTitleProps> = ({
+      title,
+      readOnly,
+      sendOutTitle
+}) => {
+      const [ currentTile, setCurrentTile ] = useState("")
+
+      useEffect(() => {
+            setCurrentTile(title || "")
+      }, [title])
+
+      const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setCurrentTile(e.target.value)
+            sendOutTitle(e.target.value)
+      }
 
       return (
             <div className="thread-title-container">
@@ -14,9 +29,9 @@ const ThreadTitle: FC<ThreadTitleProps> = ({ title }) => {
                   <div className="field">
                         <input
                               type="text"
-                              value={title || ""}
+                              value={currentTile}
                               onChange={onChangeTitle}
-                              placeholder="Title"
+                              readOnly={readOnly}
                         />
                   </div>
             </div>

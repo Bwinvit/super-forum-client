@@ -4,7 +4,7 @@ import UserNameAndTime from "./UserNameAndTime"
 
 interface ThreadHeaderProps {
       userName: string
-      LastModifiedOn: Date
+      LastModifiedOn: any
       title: string
 }
 

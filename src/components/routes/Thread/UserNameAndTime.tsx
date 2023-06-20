@@ -15,7 +15,7 @@ const UserNameAndTime: FC<UserNameAndTimeProps> = ({
             <span>
                   <strong>{userName}</strong>
                   <label style={{ marginLeft: "1em"}}>
-                        {LastModifiedOn ? getTimePassIfLessThanDay(LastModifiedOn) : ""}
+                        {LastModifiedOn ? getTimePassIfLessThanDay(new Date(LastModifiedOn)) : ""}
                   </label>
             </span>
       )

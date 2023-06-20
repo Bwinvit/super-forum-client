@@ -1,6 +1,13 @@
-import React, { useState, useCallback, useMemo, FC } from "react";
-import { Editable, withReact, useSlate, Slate } from "slate-react";
-import { Editor, Transforms, createEditor } from "slate";
+import React, {
+    useState,
+    useCallback,
+    useMemo,
+    FC,
+    useEffect,
+    Children,
+} from "react";
+import { Editable, withReact, useSlate, Slate, ReactEditor } from "slate-react";
+import { Editor, Transforms, createEditor, Node, BaseEditor } from "slate";
 import isHotkey from "is-hotkey";
 import { withHistory } from "slate-history";
 import { Button, Toolbar } from "./RichTextControls";
@@ -17,6 +24,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./RichEditor.css";
 
+export const getTextFromNodes = (nodes: Node[]) => {
+    return nodes.map((n: Node) => Node.string(n)).join("\n");
+};
+
 const HOTKEYS: { [keyName: string]: string } = {
     "mod+b": "bold",
     "mod+i": "italic",
@@ -26,16 +37,22 @@ const HOTKEYS: { [keyName: string]: string } = {
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
-interface RichEditorProps {
+class RichEditorProps {
     existingBody?: string;
+    readOnly?: boolean = false;
+    sendOutBody?: (body: Node[]) => void;
 }
 
-const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
-    const [value, setValue] = useState([
+const RichEditor: FC<RichEditorProps> = ({
+    existingBody,
+    readOnly = false,
+    sendOutBody,
+}) => {
+    const [value, setValue] = useState<Node[]>([
         {
             type: "paragraph",
-            children: [{ text: "Enter your post here." }],
-        },
+            children: [{ text: "" }],
+        } as Node,
     ]);
     const renderElement = useCallback(
         (props: any) => <Element {...props} />,
@@ -44,38 +61,53 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
     const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
+    useEffect(() => {
+        if (existingBody) {
+            setValue([
+                {
+                    type: "paragraph",
+                    children: [{ text: existingBody }],
+                } as Node
+            ])
+        }
+    }, [existingBody]);
+
     const onChangeEditorValue = (val: any) => {
         setValue(val);
+        sendOutBody && sendOutBody(val);
     };
 
     return (
         <Slate editor={editor} value={value} onChange={onChangeEditorValue}>
-            <Toolbar>
-                <MarkButton format="bold" icon="bold" />
-                <MarkButton format="italic" icon="italic" />
-                <MarkButton format="underline" icon="underlined" />
-                <MarkButton format="code" icon="code" />
-                <BlockButton format="heading-one" icon="header1" />
-                <BlockButton format="block-quote" icon="in_quotes" />
-                <BlockButton format="numbered-list" icon="list_numbered" />
-                <BlockButton format="bulleted-list" icon="list_bulleted" />
-            </Toolbar>
+            {readOnly ? null : (
+                <Toolbar>
+                    <MarkButton format="bold" icon="bold" />
+                    <MarkButton format="italic" icon="italic" />
+                    <MarkButton format="underline" icon="underlined" />
+                    <MarkButton format="code" icon="code" />
+                    <BlockButton format="heading-one" icon="header1" />
+                    <BlockButton format="block-quote" icon="in_quotes" />
+                    <BlockButton format="numbered-list" icon="list_numbered" />
+                    <BlockButton format="bulleted-list" icon="list_bulleted" />
+                </Toolbar>
+            )}
             <Editable
                 className="editor"
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}
-                placeholder="Enter some rich text…"
+                placeholder="Enter your post here."
                 spellCheck
                 autoFocus
                 onKeyDown={(event) => {
                     for (const hotkey in HOTKEYS) {
-                        if (isHotkey(hotkey, event as any)) {
-                            event.preventDefault();
-                            const mark = HOTKEYS[hotkey];
-                            toggleMark(editor, mark);
-                        }
+                      if (isHotkey(hotkey, event as any)) {
+                        event.preventDefault();
+                        const mark = HOTKEYS[hotkey];
+                        toggleMark(editor, mark);
+                      }
                     }
-                }}
+                  }}
+                readOnly={readOnly}
             />
         </Slate>
     );
@@ -147,12 +179,12 @@ const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
 };
 
 const isBlockActive = (editor: Editor, format: string) => {
-      const [match] = Editor.nodes(editor, {
+    const [match] = Editor.nodes(editor, {
         match: (n: any) => n.type === format,
-      });
-    
-      return !!match;
-    };
+    });
+
+    return !!match;
+};
 
 const toggleBlock = (editor: Editor, format: string) => {
     const isActive = isBlockActive(editor, format);
@@ -163,9 +195,9 @@ const toggleBlock = (editor: Editor, format: string) => {
         split: true,
     });
 
-//     Transforms.setNodes(editor, {
-//         type: isActive ? "paragraph" : isList ? "list-item" : format,
-//     });
+    //     Transforms.setNodes(editor, {
+    //         type: isActive ? "paragraph" : isList ? "list-item" : format,
+    //     });
 
     if (!isActive && isList) {
         const block = { type: format, children: [] };

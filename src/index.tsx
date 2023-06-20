@@ -8,17 +8,33 @@ import { store } from "./store/store";
 import { ErrorBoundary } from "react-error-boundary";
 import FallbackRender from "./components/fallback/FallbackBoundary";
 import { BrowserRouter } from "react-router-dom";
+import {
+    ApolloClient,
+    ApolloProvider,
+    InMemoryCache,
+} from "@apollo/client";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
+
+const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+    credentials: "include",
+    cache: new InMemoryCache({
+        resultCaching: false
+    }),
+});
+
 root.render(
     <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
-                <ErrorBoundary FallbackComponent={FallbackRender}>
-                    {[<App key={"App"} />]}
-                </ErrorBoundary>
+                <ApolloProvider client={client}>
+                    <ErrorBoundary FallbackComponent={FallbackRender}>
+                        {[<App key={"App"} />]}
+                    </ErrorBoundary>
+                </ApolloProvider>
             </BrowserRouter>
         </Provider>
     </React.StrictMode>

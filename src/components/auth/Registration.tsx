@@ -60,6 +60,7 @@ const Registration: FC<RegistrationProps> = ({ isOpen, onClickToggle }) => {
       isOpen={isOpen}
       onRequestClose={onClickToggle}
       shouldCloseOnOverlayClick={true}
+      ariaHideApp={false}
     >
       <form>
         <div className="reg-inputs">

@@ -1,85 +1,49 @@
 import React, { FC } from "react";
-import "./ThreadCard.css"
-import Thread from '../../../models/Thread'
+import "./ThreadCard.css";
+import Thread from "../../../models/Thread";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useWindowDimensions from "../../../hook/useWindowDimension";
-import { faEye, faHeart, faReply } from "@fortawesome/free-solid-svg-icons";
-import "./ThreadCard.css"
+import { faEye, faReplyAll } from "@fortawesome/free-solid-svg-icons";
+import "./ThreadCard.css";
+import RichEditor from "../../editor/RichEditor";
+import ThreadPointsInline from "../../points/ThreadPointInline";
+import ThreadPointsBar from "../../points/ThreadPointsBar";
 
 interface ThreadCardProps {
-    thread: Thread
+    thread: Thread;
 }
 
 const ThreadCard: FC<ThreadCardProps> = ({ thread }) => {
-    const navigate = useNavigate()
-    const { width } = useWindowDimensions()
+    const navigate = useNavigate();
+    const { width } = useWindowDimensions();
 
     const onClickShowThread = (e: React.MouseEvent<HTMLElement>) => {
-        navigate("/thread/" + thread.id)
-    }
+        navigate("/thread/" + thread.id);
+    };
 
-    const getPoints = ( thread: Thread) => {
-        if ( width <= 768 ) {
+    const getResponseCount = (thread: Thread) => {
+        if (width <= 768) {
             return (
-                <label
-                    style={{ margin: ".25rem .75rem"}}
+                <span
+                    style={{
+                        marginRight: ".5em",
+                    }}
                 >
-                    {thread.points || 0}
+                    {thread && thread.threadItems && thread.threadItems.length}
                     <FontAwesomeIcon
-                        icon={faHeart}
+                        icon={faReplyAll}
                         className="points-icon"
-                        style={{ marginLeft: ".2rem"}}
+                        style={{
+                            marginLeft: ".25em",
+                            marginTop: "-.25em",
+                        }}
                     />
-                </label>
-            )
+                </span>
+            );
         }
-        return null
-    }
-
-    const getResponse = ( thread : Thread ) => {
-        if ( width <= 768) {
-            return (
-                <label
-                    style={{ marginRight: ".5rem"}}
-                >
-                    { thread && thread.threadItems && thread.threadItems.length}
-                    <FontAwesomeIcon
-                        icon={faReply}
-                        className="points-icon"
-                        style={{ margin: "-.25rem 0 0 .25rem"}}
-                    />
-                </label>
-            )
-        }
-        return null
-    }
-
-    const getPointsNonMobile = () => {
-        if ( width > 768) {
-            return (
-                <div className="threadcard-points">
-                    <div className="threadcard-points-item">
-                        { thread.points || 0}
-                        <br />
-                        <FontAwesomeIcon
-                            icon={faHeart}
-                            className="points-icon"
-                        />
-                    </div>
-                    <div className="threadcard-points-item" style={{ marginBottom: ".75rem"}}>
-                        { thread && thread.threadItems && thread.threadItems.length}
-                        <br />
-                        <FontAwesomeIcon
-                            icon={faReply}
-                            className="points-icon"
-                        />
-                    </div>
-                </div>
-            )
-        }
-        return null
-    }
+        return null;
+    };
 
     return (
         <section className="panel threadcard-container">
@@ -91,15 +55,18 @@ const ThreadCard: FC<ThreadCardProps> = ({ thread }) => {
                     >
                         <strong>{thread.category.name}</strong>
                     </Link>
-                    <span className="usernamme-header" style={{ marginLeft: ".5rem"}}>
-                        {thread.userName}
+                    <span
+                        className="username-header"
+                        style={{ marginLeft: ".5em" }}
+                    >
+                        {thread.user.userName}
                     </span>
                 </div>
                 <div className="question">
                     <div
                         onClick={onClickShowThread}
                         data-thread-id={thread.id}
-                        style={{marginBottom: ".4em"}}
+                        style={{ marginBottom: ".4em" }}
                     >
                         <strong>{thread.title}</strong>
                     </div>
@@ -108,30 +75,36 @@ const ThreadCard: FC<ThreadCardProps> = ({ thread }) => {
                         onClick={onClickShowThread}
                         data-thread-id={thread.id}
                     >
-                        <div>{thread.body}</div>
+                        {/* <RichEditor
+                            existingBody={thread.body}
+                            readOnly={true}
+                        /> */}
+                        {thread.body}
                     </div>
                     <div className="threadcard-footer">
                         <span
-                            style={{marginRight: ".5em"}}
+                            style={{
+                                marginRight: ".5em",
+                            }}
                         >
-                            <label>
-                                {thread.views}
-                                <FontAwesomeIcon
-                                    icon={faEye}
-                                    className="icon-lg"
-                                />
-                            </label>
+                            {thread.views}
+                            <FontAwesomeIcon icon={faEye} className="icon-lg" />
                         </span>
-                        <span>
-                            {getPoints(thread)}
-                            {getResponse(thread)}
-                        </span>
+                        {width <= 768 ? (
+                            <ThreadPointsInline points={thread?.points || 0} />
+                        ) : null}
+                        {getResponseCount(thread)}
                     </div>
                 </div>
             </div>
-            {getPointsNonMobile()}
+            <ThreadPointsBar
+                points={thread?.points || 0}
+                responseCount={
+                    thread && thread.threadItems && thread.threadItems.length
+                }
+            />
         </section>
-    )
-}
+    );
+};
 
-export default ThreadCard
+export default ThreadCard;

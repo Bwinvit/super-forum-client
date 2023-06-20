@@ -41,6 +41,7 @@ const Nav = () => {
                 isOpen={showMenu}
                 onRequestClose={onRequestClose}
                 shouldCloseOnOverlayClick={true}
+                ariaHideApp={false}
             >
                 <SideBarMenus />
             </ReactModal>

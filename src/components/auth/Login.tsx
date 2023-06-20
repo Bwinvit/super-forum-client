@@ -1,29 +1,39 @@
-import { FC, useEffect, useReducer } from "react";
+import { FC, useReducer } from "react";
 import ModalProps from "../types/ModalProps";
 import userReducer from "./common/UserReducer";
-import { useDispatch } from "react-redux";
-import { UserProfileSetType } from "../../store/user/Reducer";
+// import { UserProfileSetType } from "../../store/user/Reducer";
 import { allowSubmit } from "./common/Helpers";
 import ReactModal from "react-modal";
+import { gql, useMutation } from "@apollo/client";
+import useRefreshReduxMe, { Me } from "../../hook/useRefreshReduxMe";
+// import { setUserProfile } from "../../store/user/userSlice";
+
+const LoginMutation = gql`
+       mutation Login($userName: String!, $password: String!) {
+              login(userName: $userName, password: $password) 
+       }
+`
 
 const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
-       const initialState = {
-              userName: "",
-              password: "",
+       const [ execLogin ] = useMutation(LoginMutation, {
+              refetchQueries: [
+                     {
+                            query: Me
+                     }
+              ]
+       })
+
+       const [
+              { userName, password, resultMsg, isSubmitDisabled },
+              dispatch
+       ] = useReducer(userReducer, {
+              userName: "tester",
+              password: "Test123!@#",
               resultMsg: "",
-              isSubmitDisabled: true,
-       };
+              isSubmitDisabled: false,
+       })
 
-       const [state, dispatch] = useReducer(userReducer, initialState);
-
-       const reduxDispatch = useDispatch();
-
-       useEffect(() => {
-              reduxDispatch({
-                     type: UserProfileSetType,
-                     payload: { id: 1, userName: "testUser" },
-              });
-       }, [reduxDispatch]);
+       const { execMe, updateMe } = useRefreshReduxMe()
 
        const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch({ type: "userName", payload: e.target.value });
@@ -39,11 +49,20 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
               else allowSubmit(dispatch, "", false);
        };
 
-       const onClickLogin = (
+       const onClickLogin = async (
               e: React.MouseEvent<HTMLButtonElement, MouseEvent>
        ) => {
               e.preventDefault();
               onClickToggle(e);
+              const result = await execLogin({
+                     variables: {
+                            userName,
+                            password
+                     }
+              })
+              console.log("Login", result)
+              execMe()
+              updateMe()
        };
 
        const onClickCancel = (
@@ -58,6 +77,7 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
                      isOpen={isOpen}
                      onRequestClose={onClickToggle}
                      shouldCloseOnOverlayClick={true}
+                     ariaHideApp={false}
               >
                      <form>
                             <div className="reg-inputs">
@@ -65,7 +85,7 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
                                           <label>User Name</label>
                                           <input
                                                  type="text"
-                                                 value={state.userName}
+                                                 value={userName}
                                                  onChange={onChangeUserName}
                                           />
                                    </div>
@@ -73,7 +93,7 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
                                           <label>Password</label>
                                           <input
                                                  type="password"
-                                                 value={state.password}
+                                                 value={password}
                                                  onChange={onChangePassword}
                                           />
                                    </div>
@@ -83,7 +103,7 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
                                           <button
                                                  style={{ marginLeft: ".5em" }}
                                                  className="action-btn"
-                                                 disabled={state.isSubmitDisabled}
+                                                 disabled={isSubmitDisabled}
                                                  onClick={onClickLogin}
                                           >
                                                  Login
@@ -98,7 +118,7 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
                                    </div>
 
                                    <span className="form-btn-left">
-                                          <strong>{state.resultMsg}</strong>
+                                          <strong>{resultMsg}</strong>
                                    </span>
                             </div>
                      </form>

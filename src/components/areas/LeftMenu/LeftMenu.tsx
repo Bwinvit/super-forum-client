@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../../../hook/useWindowDimension";
-import { getCategories } from "../../../services/DataService";
-import Category from "../../../models/Category";
+// import { getCategories } from "../../../services/DataService";
+// import Category from "../../../models/Category";
+import { useAppSelector } from "../../../store/hooks";
+import { Link } from "react-router-dom";
 
 const LeftMenu = () => {
-    const { width } = useWindowDimensions()
-    const [ categories, setCategories ] = useState<JSX.Element>(
+    const { width } = useWindowDimensions();
+    const category = useAppSelector((state) => state.category)
+    const [categories, setCategories] = useState<JSX.Element>(
         <div>Left Menu</div>
-    )
+    );
 
     useEffect(() => {
-        setCategories(<div>Loading...</div>);
-        
-        getCategories()
-            .then((categories: Array<Category>) => {
-                const cats = categories.map((cat) => {
-                    return <li key={cat.id}>{cat.name}</li>
-                })
-                setCategories(<ul className="category">{cats}</ul>)
-            })
-            .catch((err) => {
-                throw new Error(err)
-            })
-    }, [])
+        const categoryList = category.payload.map((cat: any) => {
+            return <li key={cat.id}>
+                <Link to={`/categorythreads/${cat.id}`} style={{textDecoration: "none"}}>{cat.name}</Link>
+            </li>
+        })
+        setCategories(<ul className="category">{categoryList}</ul>)
+    }, [category]);
 
     if (width <= 768) {
-        return null
+        return null;
     }
-    return <div className="leftmenu">{categories}</div>
-}
+    return <div className="leftmenu">{categories}</div>;
+};
 
-export default LeftMenu
+export default LeftMenu;
